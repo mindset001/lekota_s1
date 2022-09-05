@@ -1,0 +1,124 @@
+<Formik 
+                         initialValues={{ email: "", password: "" }}
+                         validate={(values) => {
+                           const errors = {};
+                           if (!values.email) {
+                             errors.email = "Required";
+                           } else if (
+                             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                           ) {
+                             errors.email = "Invalid email address";
+                           }
+                           if (!values.password) {
+                             errors.password = "Required";
+                           }
+                           return errors;
+                         }}
+                         onSubmit={async (values, { setErrors }) => {
+                          const errors = {};
+                          // console.log("hello")
+                          try {
+                            const result = await axios.post('https://lekotapp.herokuapp.com/auth/login/', {
+                            email: values.email,
+                            password: values.password 
+                          }
+                          )
+                          
+                          
+
+                           console.log(result.status);
+                          
+                           navigation.navigate('HomeDrawer')
+                
+                
+                          } catch (error) {
+                            console.log(error.response.data);
+                            
+                            if (error.response.data){
+                              setNamy('invalid details')
+                            }
+                         
+                          }
+                        }}
+                    >
+                        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+            <View>
+            <View style={styles.cover}>
+       <View style={styles.head}>
+          <TouchableOpacity >
+
+          <Text style={{
+               fontSize: 24,
+               marginTop: Platform.OS === 'ios'? -60 : 0
+           }}>Login</Text>
+          </TouchableOpacity>
+       </View>
+       <View>
+           <TextInput
+           keyboardType = 'email-address'
+           name="email"
+           placeholder ='Email address'
+           style={styles.input}
+           onChangeText={handleChange('email')}
+            onBlur={handleBlur}
+            value={values.email}
+           />
+            {errors.email && touched.email && <View><Text>{errors.email}</Text></View> }
+
+            <View>
+                      <Text> {namy}</Text>
+                    </View>
+
+           <TextInput
+           keyboardType = 'visible-password'
+           name="password"
+           placeholder ='password'
+           style={styles.input}
+           onChangeText={handleChange('password')}
+          onBlur={handleBlur}
+          value={values.password}
+           />
+           { errors.password && touched.password &&<View><Text>{errors.password}</Text></View> }
+       </View>
+       
+
+       <View >
+       
+       <Text style={styles.label}>Forgot password?</Text>
+   </View>
+ 
+
+   
+   </View>
+
+      
+
+       <TouchableOpacity
+   style={styles.login}
+    disabled={isSubmitting}
+    onPress={handleSubmit}
+   >
+      
+   <Text style={{
+       // marginLeft: 50,
+       alignSelf: 'center',
+       color: '#fff',
+       fontSize: 20
+        
+   }}>Login</Text>
+   </TouchableOpacity>
+            </View>
+        )}
+
+                        
+
+
+                    </Formik>
